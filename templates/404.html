@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found — {{ business.name }}{% endblock %}
+
+{% block content %}
+<section class="section" style="min-height: 70vh; display: flex; align-items: center; text-align: center;">
+    <div class="container" style="max-width: 600px;">
+        <span style="font-size: 5rem; display: block; margin-bottom: 1rem;">🥟❓</span>
+        <h1 style="font-size: 4rem; color: var(--color-primary); margin-bottom: 0.5rem;">404</h1>
+        <h2>THIS MOMO DOESN'T EXIST!</h2>
+        <p style="margin: 1.5rem 0 2.5rem 0;">The page you are looking for might have been eaten, moved, or deleted.</p>
+        <a href="/" class="btn btn-primary">RETURN HOME</a>
+    </div>
+</section>
+{% endblock %}

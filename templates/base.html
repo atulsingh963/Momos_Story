@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ business.name }} — {{ business.tagline }}{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Discover handcrafted steamed, fried, Kurkure and tandoori momos at MOMOS STORY. One Momo. Endless Cravings.">
+    <meta name="keywords" content="momos, veg momos, paneer momos, chicken momos, tandoori momos, kurkure momos, food delivery">
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="{{ business.name }} — {{ business.tagline }}">
+    <meta property="og:description" content="Handcrafted steamed, fried, crispy and loaded momos. Discover a momo for every craving.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ url_for('static', filename='images/products/veg-steamed.svg') }}">
+    
+    <!-- Favicon Placeholder -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥟</text></svg>">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% include "json_ld.html" %}
+    {% block extra_css %}{% endblock %}
+</head>
+<body data-whatsapp="{{ business.whatsapp }}">
+
+    <!-- Subtle Top Scroll Progress Indicator -->
+    <div id="scroll-progress" class="scroll-progress-bar" aria-hidden="true"></div>
+
+    <!-- Custom Floating Cursor (Desktop Only) -->
+    <div id="custom-cursor" class="custom-cursor" aria-hidden="true"></div>
+
+    <!-- Sticky Header Navbar -->
+    <header class="header">
+        <div class="container navbar">
+            <a href="#home" class="brand-logo">
+                {{ business.name }}<span>.</span>
+            </a>
+
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home" class="nav-link active">Home</a></li>
+                    <li><a href="#categories" class="nav-link">Fillings</a></li>
+                    <li><a href="#menu" class="nav-link">Menu</a></li>
+                    <li><a href="#signature" class="nav-link">Our Momos</a></li>
+                    <li><a href="#builder" class="nav-link">Momo Builder</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+
+            <div class="nav-cta">
+                <a href="https://wa.me/{{ business.whatsapp }}?text=Hi%20MOMOS%20STORY!%20I'd%20like%20to%20place%20an%20order." target="_blank" rel="noopener" class="btn btn-primary">Order Now</a>
+                <button class="hamburger" aria-label="Toggle Navigation Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="brand-logo">{{ business.name }}<span>.</span></div>
+                    <p>{{ business.tagline }}</p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#signature">Our Momos</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Order</h4>
+                    <ul class="footer-links">
+                        <li><a href="https://wa.me/{{ business.whatsapp }}" target="_blank" rel="noopener">WhatsApp Order</a></li>
+                        <li><a href="tel:{{ business.phone_raw }}">Call Us directly</a></li>
+                        <li><a href="#contact">Store Location</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Social</h4>
+                    <ul class="footer-links">
+                        <li><a href="{{ business.instagram }}" target="_blank" rel="noopener">Instagram</a></li>
+                        <li><a href="{{ business.facebook }}" target="_blank" rel="noopener">Facebook</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 {{ business.name }}. All Rights Reserved. Crafted with passion for momo lovers.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- GSAP & ScrollTrigger CDN Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <!-- Main JS Script -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,367 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- HERO SECTION -->
+<section id="home" class="hero">
+    <div class="container hero-grid">
+        <div class="hero-content">
+            <span class="eyebrow hero-eyebrow">HANDCRAFTED MOMOS</span>
+            <h1 class="hero-title">
+                <span class="hero-line">THE ART</span>
+                <span class="hero-line">OF MOMOS<span class="dot">.</span></span>
+            </h1>
+            <p class="hero-desc">Steamed, fried, crispy and loaded with flavour. Discover a momo for every craving.</p>
+            <div class="hero-actions">
+                <a href="#menu" class="btn btn-primary hero-btn">EXPLORE MOMOS</a>
+                <a href="https://wa.me/{{ business.whatsapp }}?text=Hi%20MOMOS%20STORY!%20I'd%20like%20to%20order." target="_blank" rel="noopener" class="btn btn-secondary hero-btn">ORDER NOW</a>
+            </div>
+        </div>
+        
+        <div class="hero-visual">
+            <!-- Realistic Multi-layer CSS/GSAP Steam Streams -->
+            <div class="hero-steam-container" aria-hidden="true">
+                <div class="steam-stream steam-1"></div>
+                <div class="steam-stream steam-2"></div>
+                <div class="steam-stream steam-3"></div>
+            </div>
+
+            <!-- Floating Decorative Layer for Mouse Parallax -->
+            <div class="deco-element deco-chilli parallax-layer" data-depth="0.3" aria-hidden="true">🌶️</div>
+            <div class="deco-element deco-spice-1 parallax-layer" data-depth="0.5" aria-hidden="true">✨</div>
+            <div class="deco-element deco-spice-2 parallax-layer" data-depth="0.2" aria-hidden="true">🧄</div>
+            <div class="deco-element deco-circle-1 parallax-layer" data-depth="0.1" aria-hidden="true"></div>
+            
+            <div class="hero-image-wrapper parallax-layer" data-depth="0.15">
+                <img src="{{ url_for('static', filename='images/products/veg-steamed.svg') }}" alt="Signature Handcrafted Momos Dish" width="480" height="480" class="hero-main-img">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MOMO CATEGORIES SECTION -->
+<section id="categories" class="section" data-reveal="up">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">FILLING SELECTION</span>
+            <h2>CHOOSE YOUR FILLING</h2>
+            <p class="subheading">Three fillings. Endless ways to enjoy them.</p>
+        </div>
+
+        <div class="categories-grid">
+            {% for cat in categories %}
+            <div class="category-card" id="cat-card-{{ cat.id }}" data-reveal="up">
+                <div class="category-img-box">
+                    <img src="{{ cat.image }}" alt="{{ cat.name }}" loading="lazy">
+                </div>
+                <div class="category-info">
+                    <span class="badge">{{ cat.badge }}</span>
+                    <h3>{{ cat.name }}</h3>
+                    <p class="category-meta">{{ cat.varieties_count }} Varieties Available</p>
+                    <p>{{ cat.description }}</p>
+                    <button onclick="selectCategoryFilter('{{ cat.id }}')" class="btn btn-secondary btn-block">
+                        <span>Explore {{ cat.name }}</span>
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- MENU FILTER & PRODUCTS SECTION -->
+<section id="menu" class="section" data-reveal="up">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">OUR FULL MENU</span>
+            <h2>EXPLORE ALL MOMOS</h2>
+            <p class="subheading">Filter by your favourite filling or cooking style</p>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="filter-controls">
+            <!-- Category Filters -->
+            <div class="filter-group category-filter-group">
+                <button class="filter-btn category-filter active" data-category="all">ALL FILLINGS</button>
+                <button class="filter-btn category-filter" data-category="veg">VEG</button>
+                <button class="filter-btn category-filter" data-category="paneer">PANEER</button>
+                <button class="filter-btn category-filter" data-category="chicken">CHICKEN</button>
+            </div>
+
+            <!-- Style Filters -->
+            <div class="filter-group style-filter-group">
+                {% for style in styles %}
+                <button class="filter-btn style-filter {% if loop.first %}active{% endif %}" data-style="{{ style.id }}">{{ style.name }}</button>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Dynamic Product Cards Grid -->
+        <div class="menu-grid" id="menu-grid">
+            {% for item in menu %}
+            <div class="product-card" data-category="{{ item.category }}" data-style="{{ item.style }}" data-reveal="up">
+                <div class="product-img-box">
+                    {% if item.badge %}
+                    <span class="badge product-badge">{{ item.badge }}</span>
+                    {% endif %}
+                    <img src="{{ item.image }}" alt="{{ item.name }}" loading="lazy" onerror="this.onerror=null;this.src='/static/images/products/veg-steamed.svg';">
+                </div>
+                <div class="product-details">
+                    <h3 class="product-title">{{ item.name }}</h3>
+                    <p class="product-desc">{{ item.description }}</p>
+                    <div class="product-meta-row">
+                        <span>{{ item.style }}</span>
+                        <span>•</span>
+                        <span>{{ item.pieces }} PCS</span>
+                    </div>
+                    <div class="product-price-row">
+                        <span class="product-price">₹{{ item.price }}</span>
+                        <a href="https://wa.me/{{ business.whatsapp }}?text=Hi!%20I'd%20like%20to%20order:%20{{ item.name|urlencode }}%20(₹{{ item.price }})" target="_blank" rel="noopener" class="btn btn-accent">ADD TO ORDER</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Empty Filter State -->
+            <div class="empty-menu" id="empty-menu" style="display: none;">
+                <h3>NO MATCHING MOMOS FOUND</h3>
+                <p>Try switching filling categories or style options.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SIGNATURE MOMOS SECTION (Pinned Horizontal Scroll on Desktop) -->
+<section id="signature" class="section signature-section">
+    <div class="signature-pinned-wrapper">
+        <div class="container signature-container">
+            <div class="section-header">
+                <span class="eyebrow">HOUSE SPECIALITIES</span>
+                <h2>SIGNATURE MOMOS</h2>
+                <p class="subheading">For cravings that need something extra.</p>
+            </div>
+
+            <div class="signature-track" id="signature-track">
+                {% for sig in signature_momos %}
+                <div class="signature-card">
+                    <div class="sig-img-box">
+                        <img src="{{ sig.image }}" alt="{{ sig.name }}" loading="lazy" class="sig-parallax-img">
+                    </div>
+                    <div class="sig-content">
+                        <span class="badge badge-primary">{{ sig.badge }}</span>
+                        <h3>{{ sig.name }}</h3>
+                        <span class="sig-tagline">{{ sig.tagline }}</span>
+                        <p class="sig-desc">{{ sig.description }}</p>
+                        <a href="#menu" onclick="selectCategoryFilter('all')" class="btn btn-secondary">
+                            <span>VIEW OPTIONS</span>
+                            <span class="btn-arrow">→</span>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW WE MAKE IT SECTION (Scroll-driven Process Timeline) -->
+<section class="section process-section" data-reveal="up">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">OUR CRAFT</span>
+            <h2>HOW WE MAKE IT</h2>
+            <p class="subheading">Craftsmanship in every fold</p>
+        </div>
+
+        <div class="process-wrapper">
+            <div class="process-line-bg">
+                <div class="process-line-fill" id="process-line-fill"></div>
+            </div>
+
+            <div class="process-grid">
+                {% for step in how_it_works %}
+                <div class="process-card" data-step="{{ step.step }}" data-reveal="up">
+                    <div class="process-step">{{ step.step }}</div>
+                    <h3>{{ step.title }}</h3>
+                    <p>{{ step.description }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- INTERACTIVE MOMO BUILDER -->
+<section id="builder" class="section" data-reveal="up">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">CUSTOM COMBO</span>
+            <h2>BUILD YOUR MOMO</h2>
+            <p class="subheading">Pick your filling. Choose your style. Make it yours.</p>
+        </div>
+
+        <div class="builder-box">
+            <div class="builder-steps">
+                <!-- Step 1: Filling -->
+                <div class="builder-step">
+                    <h4 class="builder-step-title">1. Choose Filling</h4>
+                    <div class="builder-options">
+                        <button class="builder-opt-btn builder-filling-opt active" data-filling="veg">VEG</button>
+                        <button class="builder-opt-btn builder-filling-opt" data-filling="paneer">PANEER</button>
+                        <button class="builder-opt-btn builder-filling-opt" data-filling="chicken">CHICKEN</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Style -->
+                <div class="builder-step">
+                    <h4 class="builder-step-title">2. Choose Style</h4>
+                    <div class="builder-options">
+                        <button class="builder-opt-btn builder-style-opt active" data-style="steamed">STEAMED</button>
+                        <button class="builder-opt-btn builder-style-opt" data-style="fried">FRIED</button>
+                        <button class="builder-opt-btn builder-style-opt" data-style="kurkure">KURKURE</button>
+                        <button class="builder-opt-btn builder-style-opt" data-style="tandoori">TANDOORI</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Result Card -->
+            <div class="builder-result-card" id="builder-result-card">
+                <div class="builder-result-info">
+                    <span class="eyebrow">YOUR CUSTOM MOMO</span>
+                    <h3 id="builder-item-title">Classic Veg Momos</h3>
+                    <p id="builder-item-desc">Fresh vegetable filling wrapped in soft handmade momo dough.</p>
+                    <span class="badge" id="builder-item-badge" style="margin-top: 0.5rem;">STEAMED</span>
+                </div>
+                <div class="builder-result-actions" style="text-align: right;">
+                    <div id="builder-item-pieces" style="color: var(--color-muted); font-weight: 700; font-size: 0.9rem;">8 Pieces</div>
+                    <div id="builder-item-price" class="builder-result-price">₹60</div>
+                    <a id="builder-order-btn" href="#" target="_blank" rel="noopener" class="btn btn-primary" style="margin-top: 0.75rem;">ADD TO ORDER</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- BRAND STORY SECTION -->
+<section id="about" class="section story-section" data-reveal="up">
+    <div class="container story-grid">
+        <div class="story-content" data-reveal="left">
+            <span class="eyebrow">OUR STORY</span>
+            <h2>MORE THAN JUST MOMOS.</h2>
+            <p>We believe a great momo starts with a great filling, the right balance of seasoning and a perfectly cooked wrapper. MOMOS STORY brings together classic favourites and bold new flavours for people who take their momo cravings seriously.</p>
+            <p>Whether you crave delicate steamed parcels or crunch-heavy kurkure bites, we craft each plate fresh to order using regional recipes and authentic spices.</p>
+            <a href="#menu" class="btn btn-secondary">DISCOVER OUR CREATIONS</a>
+        </div>
+        <div class="story-img-wrapper" data-reveal="right">
+            <img src="{{ url_for('static', filename='images/products/paneer-tandoori.svg') }}" alt="MOMOS STORY Brand Kitchen Story" loading="lazy" class="story-parallax-img">
+        </div>
+    </div>
+</section>
+
+<!-- REVIEWS SECTION -->
+<section class="section" data-reveal="up">
+    <div class="container">
+        <div class="section-header">
+            <span class="eyebrow">LOVED BY FOODIES</span>
+            <h2>CUSTOMER REVIEWS</h2>
+            <p class="subheading">Here is what our momo lovers have to say</p>
+        </div>
+
+        <div class="reviews-grid">
+            {% for review in reviews %}
+            <div class="review-card" data-reveal="up">
+                <div class="stars">★★★★★</div>
+                <p class="review-comment">"{{ review.comment }}"</p>
+                <div>
+                    <div class="review-author">{{ review.name }}</div>
+                    <span class="review-tag">{{ review.location }} • Verified Craver</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ORDER CTA SECTION -->
+<section class="section cta-section" data-reveal="up">
+    <div class="cta-bg-particles" aria-hidden="true">
+        <div class="cta-particle p-1">🔥</div>
+        <div class="cta-particle p-2">🥟</div>
+        <div class="cta-particle p-3">✨</div>
+    </div>
+    <div class="container cta-box">
+        <span class="eyebrow">GET IT FRESH</span>
+        <h2 class="cta-heading">
+            <span class="cta-line-left">HUNGRY</span>
+            <span class="cta-line-right">YET?</span>
+        </h2>
+        <p>Your next plate of momos is just one click away.</p>
+        <div class="cta-actions">
+            <a href="https://wa.me/{{ business.whatsapp }}?text=Hi%20MOMOS%20STORY!%20I'd%20like%20to%20place%20an%20order." target="_blank" rel="noopener" class="btn btn-primary">ORDER ON WHATSAPP</a>
+            <a href="tel:{{ business.phone_raw }}" class="btn btn-secondary">CALL NOW</a>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT SECTION -->
+<section id="contact" class="section" data-reveal="up">
+    <div class="container contact-grid">
+        <div class="contact-info" data-reveal="left">
+            <span class="eyebrow">REACH OUT</span>
+            <h2>VISIT OR CALL US</h2>
+            <p>Ready to satisfy your craving? Contact us or drop by our kitchen store.</p>
+
+            <div class="contact-info-list">
+                <div class="info-item">
+                    <span class="info-icon">📍</span>
+                    <div class="info-details">
+                        <h4>Location</h4>
+                        <p>{{ business.address }}</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-icon">📞</span>
+                    <div class="info-details">
+                        <h4>Phone</h4>
+                        <p><a href="tel:{{ business.phone_raw }}">{{ business.phone }}</a></p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-icon">💬</span>
+                    <div class="info-details">
+                        <h4>WhatsApp</h4>
+                        <p><a href="https://wa.me/{{ business.whatsapp }}" target="_blank" rel="noopener">{{ business.phone }}</a></p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-icon">✉️</span>
+                    <div class="info-details">
+                        <h4>Email</h4>
+                        <p><a href="mailto:{{ business.email }}">{{ business.email }}</a></p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-icon">⏰</span>
+                    <div class="info-details">
+                        <h4>Opening Hours</h4>
+                        <p>{{ business.hours }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-map" data-reveal="right">
+            <div class="map-placeholder">
+                <span style="font-size: 3rem; margin-bottom: 1rem;">🗺️</span>
+                <h3>MAP PLACEHOLDER</h3>
+                <p>{{ business.address }}</p>
+                <span style="font-size: 0.8rem; margin-top: 0.5rem; color: var(--color-muted);">(No external API key required)</span>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

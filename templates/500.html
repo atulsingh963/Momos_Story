@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error — {{ business.name }}{% endblock %}
+
+{% block content %}
+<section class="section" style="min-height: 70vh; display: flex; align-items: center; text-align: center;">
+    <div class="container" style="max-width: 600px;">
+        <span style="font-size: 5rem; display: block; margin-bottom: 1rem;">🔥🥟</span>
+        <h1 style="font-size: 4rem; color: var(--color-primary); margin-bottom: 0.5rem;">500</h1>
+        <h2>OUR STEAMER IS OVERHEATING!</h2>
+        <p style="margin: 1.5rem 0 2.5rem 0;">Something went wrong on our server. Please try again in a few moments.</p>
+        <a href="/" class="btn btn-primary">BACK TO SAFETY</a>
+    </div>
+</section>
+{% endblock %}
